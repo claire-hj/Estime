@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
-//using Excel = Microsoft.Office.Interop.Excel;
-
 using ESTIME.DAL.Interface;
 using ESTIME.DAL;
 using ESTIME.DAL.EstimeEntity;
-
+using OfficeOpenXml;
 
 namespace ESTIME.BusinessLibrary
 /******************************************************
@@ -22,55 +20,20 @@ namespace ESTIME.BusinessLibrary
     public class DataLoaderManager : ManagerBase
     {
         protected readonly IDataLoaderDal dal;
-
-
-        //private static string filePath;
-        ////private static int fileType;
-        //private string output;
-        //private StreamWriter outputStream;
-
-        //private int estimeFileTypeId;
         private TlEstimeFileType estimeFileType;
         private int refPeriodId;
         private TdLoad curLoad;
-        int ws;
+        ExcelPackage ws;
         private bool loadSuccess;
         private string loadErr = string.Empty;
 
         public DataLoaderManager(IConfiguration config)
-            : base(config)
+            : 
+            base(config)
         {
             dal = new DataLoaderDal(connectionString);
         }
         public DataLoaderManager() : base() { }
-
-        //public DataLoadManager(string filePath, int fileType)
-        //{
-        //    DataLoadManage.filePath = filePath;
-        //    DataLoadManage.fileType = fileType;
-
-        //}
-
-        //public void InterprovincialMigrationSubTable(Excel.Worksheet ws, string tableName, string tableSubpart)
-        //{
-        //    short intStart=1;
-        //    short intCol;
-        //    short line, dataLineStart, dataLineEnd, provFromId, provToId;
-        //    string prov;
-
-        //    //Inter
-        //    //ws.Cells.Text;
-
-        //    for (int i =1; i< ws.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell).Row; i++)
-        //    {
-        //        //Excel.Range r = ws.Cells[intStart, 1];
-
-
-        //        //if (ws.Cells[intStart, 1].te= "K"){ }
-
-
-        //    }
-        //}
 
         public long StartLoading(string refPeriodCode, string estimeFileTypeCode, string fileName, string userName)
         {
@@ -88,15 +51,18 @@ namespace ESTIME.BusinessLibrary
             };
             curLoad = dal.AddTdLoad(newLoad);
 
-            //Extract worksheet
+            TryLoadData(fileName);
 
             return curLoad.Id;
+
+
         }
 
-        public bool TryLoadData()
+        public bool TryLoadData(string filePath)
         {
             try
             {
+                //estimeFileType = dal.GetEstimeFileTypeId("3");
                 if (estimeFileType.FileType.Extension == ".txt" || estimeFileType.FileType.Extension == ".csv")
                 {
                     //loading text file
@@ -104,29 +70,39 @@ namespace ESTIME.BusinessLibrary
 
                     //new code to construct the loadStagings list from the text file
                     //To test, comment the call above and uncomment the code below
-                    //List<TdLoadStaging> loadStagings = new List<TdLoadStaging>();
-                    //loadSuccess = dal.AddTdLoadStaging(curLoad.Id, refPeriodId, loadStagings);
+                    List<TdLoadStaging> loadStagings = new List<TdLoadStaging>();
+                    loadSuccess = dal.AddTdLoadStaging(curLoad.Id, refPeriodId, loadStagings);
                 }
                 else if (estimeFileType.FileType.Extension == ".xlsx")
                 {
-                    //loading exel file
-                    if (ws == null)
+                    //loading excel file
+                    List<TlInputCoordinate> inputCoordinates = dal.GetInputCoordinateListByEstimeFileType(estimeFileType.Id).ToList();
+
+                    //use the input coordinates to converte the data in ws to a list of TdLoadData
+                    List<TdLoadData> myData = new List<TdLoadData>();
+
+
+                    var fi = new FileInfo(filePath);
+                    using (ws = new ExcelPackage(fi))
                     {
-                        loadErr = "Empty Worksheet!";
-                        loadSuccess = false;
+                        var sheet = ws.Workbook.Worksheets[estimeFileType.SheetNumber ?? 1];
+                        inputCoordinates.ForEach(delegate (TlInputCoordinate coord)
+                                        {
+                                            int rowNum = coord.RowNumber ?? -1;
+
+
+                                            int colNum = coord.ColumnNumber;
+
+                                            String val = sheet.Cells[rowNum, colNum].Value.ToString();
+
+                                            myData.Add(new TdLoadData(curLoad.Id, coord.RecordNumber, coord.InputVariableId,
+                                                refPeriodId, val));
+                                        });
+
                     }
-                    else
-                    {
+                    //Add new data and save to database
+                    loadSuccess = dal.AddTdLoadData(curLoad.Id, refPeriodId, myData);
 
-                        List<TlInputCoordinate> inputCoordinates = dal.GetInputCoordinateListByEstimeFileType(estimeFileType.Id).ToList();
-
-                        //use the input coordinates to converte the data in ws to a list of TdLoadData
-                        List<TdLoadData> myData = new List<TdLoadData>();
-
-
-                        //Add new data and save to database
-                       loadSuccess = dal.AddTdLoadData(curLoad.Id, refPeriodId, myData);
-                    }
                 }
                 return loadSuccess;
             }
