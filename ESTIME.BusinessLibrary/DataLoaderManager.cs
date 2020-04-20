@@ -7,6 +7,7 @@ using ESTIME.DAL.Interface;
 using ESTIME.DAL;
 using ESTIME.DAL.EstimeEntity;
 using OfficeOpenXml;
+using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
 
 namespace ESTIME.BusinessLibrary
 /******************************************************
@@ -51,14 +52,14 @@ namespace ESTIME.BusinessLibrary
             };
             curLoad = dal.AddTdLoad(newLoad);
 
-            TryLoadData(fileName);
+            //TryLoadData(fileName);
 
             return curLoad.Id;
 
 
         }
 
-        public bool TryLoadData(string filePath)
+        public bool TryLoadData(string provCode = null)
         {
             try
             {
@@ -75,8 +76,9 @@ namespace ESTIME.BusinessLibrary
                 }
                 else if (estimeFileType.FileType.Extension == ".xlsx")
                 {
+                    
                     //loading excel file
-                    var fi = new FileInfo(filePath);
+                    var fi = new FileInfo(curLoad.FilePath);
                     if (estimeFileType.IsUniform)
                     {
                         //Uniform file
@@ -84,12 +86,26 @@ namespace ESTIME.BusinessLibrary
                         {
                             var sheet = ws.Workbook.Worksheets[estimeFileType.SheetNumber ?? 1];
 
-                            int lastUsedRow = sheet.Cells.End.Row;
                             List<TdLoadStaging> myStaging = new List<TdLoadStaging>();
-                            for (int counter = 1; counter < lastUsedRow; counter++)
-                            {
-                                string val = sheet.Row(counter).ToString();
-                                myStaging.Add(new TdLoadStaging(curLoad.Id, counter, val));
+
+                            var start = sheet.Dimension.Start;
+                            var end = sheet.Dimension.End;
+                            //The data starts at row 2
+                            for (int row = start.Row + 1; row <= end.Row; row++)
+                            { // Row by row...  
+                                List<string> rowVals = new List<string>();
+                                for (int col = start.Column; col <= end.Column; col++)
+                                { // ... Cell by cell...  
+                                    string cellValue = sheet.Cells[row, col].Value.ToString();
+                                    rowVals.Add(cellValue);
+                                }
+                                //add the province code to the end
+                                if (provCode != null)
+                                {
+                                    rowVals.Add(provCode);
+                                }
+                                string myRow = string.Join(',', rowVals);
+                                myStaging.Add(new TdLoadStaging(curLoad.Id, row - 1, myRow));
                             }
                             loadSuccess = dal.AddTdLoadStaging(curLoad.Id, refPeriodId, myStaging);
                         }

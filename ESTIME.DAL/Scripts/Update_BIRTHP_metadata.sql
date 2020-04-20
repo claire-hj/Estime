@@ -37,9 +37,9 @@ where eft.Code = 'BIRTHP' and v.Code in ('BirthYYYY', 'BirthMM')
 
 insert into ESTIME.tl_InputCoordinate
 (RecordNumber, InputVariableId, ColumnNumber, RowNumber)
-select 1, iv.Id, iif(v.Code = 'BirthYYYY', 1, iif(v.Code = 'BirthMM', 2, 3)), NULL
+select 1, iv.Id, iif(v.Code = 'BirthYYYY', 1, iif(v.Code = 'BirthMM', 2, iif(v.Code = 'RECORDVALUE', 3, 4))), NULL
 from ESTIME.tl_InputVariable iv
 inner join ESTIME.tl_EstimeFileType eft
 on eft.Id = iv.EstimeFileTypeId and eft.Code = 'BIRTHP'
 inner join ESTIME.tl_Variable v
-on v.Id = iv.VariableId and v.Code in ('BirthYYYY', 'BirthMM', 'RECORDVALUE')
+on v.Id = iv.VariableId
