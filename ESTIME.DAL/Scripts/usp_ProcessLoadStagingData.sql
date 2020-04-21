@@ -122,6 +122,12 @@ BEGIN TRY
 
 	IF (EXISTS(SELECT * FROM @InputVarValue WHERE VarCode LIKE '%MM%' OR VarCode LIKE '%YYYY%'))
 	BEGIN
+		--first need to reformat the MM variable with a leading 0
+		UPDATE ivv
+		SET ivv.VarValue = RIGHT('0' + ivv.VarValue, 2)
+		FROM @InputVarValue ivv
+		WHERE ivv.VarCode LIKE '%MM%';
+
 		--retrieve the reference period info by finding Variables like '%MM%' and '%YYYY%'
 	    UPDATE ivv
 		SET ivv.RefPeriodCode = CASE WHEN ivv.VarCode LIKE '%MM%' OR ivv.VarCode LIKE '%YYYY%' THEN ivv.VarValue END
