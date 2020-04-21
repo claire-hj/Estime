@@ -226,7 +226,7 @@ namespace ESTIME.DAL
                         context.TdLoadStaging.AddRange(newLoadStaging);
                         context.SaveChanges();
 
-                        context.Database.ExecuteSqlCommand("ESTIME.usp_ProccessLoadStagingData @LoadId, @RefPeriodId, @SuccessCode OUTPUT, @ErrorExceptionMessage OUTPUT", parameters);
+                        context.Database.ExecuteSqlCommand("ESTIME.usp_ProcessLoadStagingData @LoadId, @RefPeriodId, @SuccessCode OUTPUT, @ErrorExceptionMessage OUTPUT", parameters);
                         retVal = Convert.ToInt32(successParam.Value) == 0 ? true : false;
 
                         trans.Commit();

@@ -54,14 +54,8 @@ BEGIN TRY
 	WHERE Id = @RefPeriodId;
 
 	DECLARE @YearCode VARCHAR(4) = SUBSTRING(@RefPeriodCode, 1, 4);
-
-	DECLARE @IsUniform BIT;
-	SELECT @IsUniform = @IsUniform
-	FROM ESTIME.tl_EstimeFileType
-	WHERE Id = @EstimeFileTypeId;
-
+	
 	DECLARE @ColDelimiter VARCHAR(10);
-
 	SELECT @ColDelimiter = IIF(eft.ColumnDelimiterId IS NULL, '', cd.Code)
 	FROM ESTIME.tl_EstimeFileType eft
 	LEFT JOIN ESTIME.tl_ColumnDelimiter cd
@@ -84,6 +78,10 @@ BEGIN TRY
 	INNER JOIN ESTIME.tl_Variable v
 	ON v.Id = iv.VariableId
 	WHERE iv.isParameter = 0 AND iv.EstimeFileTypeId = @EstimeFileTypeId AND iv.isMandatory = 1;
+
+	--Determine if the RECORDVALUE variable is part of the input file
+	DECLARE @IsRecordValueVarInCoordinate BIT;
+	SET @IsRecordValueVarInCoordinate = CASE WHEN EXISTS (SELECT 1 FROM @InputVar WHERE VarCode = 'RECORDVALUE') THEN 1 ELSE 0 END;
 
 	DECLARE @InputVarValue TABLE(RecId INT, InputVarId INT, VarCode VARCHAR(50), VarValue VARCHAR(500), RefPeriodCode VARCHAR(50));
 
@@ -148,25 +146,29 @@ BEGIN TRY
 	WHERE VarCode LIKE '%MM%' OR VarCode LIKE '%YYYY%';
 
 
-	--delete the records that not in the reference year 
-	DELETE FROM @InputVarValue
-	WHERE SUBSTRING(RefPeriodCode, 1, 4) <> @YearCode;
+	--delete the records that not in the reference year
+	--S. Cheng 2020-04-20, need more info on how to handle data from other years
+	--DELETE FROM @InputVarValue
+	--WHERE SUBSTRING(RefPeriodCode, 1, 4) <> @YearCode;
 
-	-- insert the RECORDVALUE variable
-	INSERT INTO @InputVarValue
-	(
-		RecId,
-		InputVarId,
-		VarCode,
-		VarValue,
-		RefPeriodCode
-	)
-	SELECT DISTINCT ivv.RecId, iv2.Id, 'RECORDVALUE', '1', ivv.RefPeriodCode
-	FROM @InputVarValue ivv
-	CROSS JOIN (SELECT iv.Id FROM ESTIME.tl_InputVariable iv
-				INNER JOIN ESTIME.tl_Variable v
-				ON v.Id = iv.VariableId AND v.Code = 'RECORDVALUE'
-				WHERE iv.EstimeFileTypeId = @EstimeFileTypeId) AS iv2;
+	-- insert the RECORDVALUE variable when it's not part of the input file
+	IF ( @IsRecordValueVarInCoordinate = 0)
+	BEGIN
+		INSERT INTO @InputVarValue
+		(
+			RecId,
+			InputVarId,
+			VarCode,
+			VarValue,
+			RefPeriodCode
+		)
+		SELECT DISTINCT ivv.RecId, iv2.Id, 'RECORDVALUE', '1', ivv.RefPeriodCode
+		FROM @InputVarValue ivv
+		CROSS JOIN (SELECT iv.Id FROM ESTIME.tl_InputVariable iv
+					INNER JOIN ESTIME.tl_Variable v
+					ON v.Id = iv.VariableId AND v.Code = 'RECORDVALUE'
+					WHERE iv.EstimeFileTypeId = @EstimeFileTypeId) AS iv2;
+	END
 
 	--Birth and Death data need to be aggregated by PROV, SEX, and AGE
 	IF (@EstimeFileTypeCode = 'BIRTH' OR @EstimeFileTypeCode = 'DEATH')

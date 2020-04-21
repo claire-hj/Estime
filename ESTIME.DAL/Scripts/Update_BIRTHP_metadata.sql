@@ -28,6 +28,15 @@ inner join ESTIME.tl_EstimeFileType eft
 on eft.id = iv.EstimeFileTypeId
 where eft.Code = 'BIRTHP' and v.Code = 'SEX';
 
+update iv
+set isParameter = 0
+from ESTIME.tl_InputVariable iv
+inner join ESTIME.tl_variable v
+on v.Id =iv.VariableId
+inner join ESTIME.tl_EstimeFileType eft
+on eft.id = iv.EstimeFileTypeId
+where eft.Code = 'BIRTHP' and v.Code = 'PROV';
+
 insert into ESTIME.tl_InputVariable
 (EstimeFileTypeId, VariableId, DisplayOrder, isMandatory, isParameter)
 select eft.Id, v.Id, null, 1, 0

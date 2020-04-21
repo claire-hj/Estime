@@ -125,7 +125,7 @@ namespace ESTIME.BusinessLibrary
 
                                 int colNum = coord.ColumnNumber;
 
-                                String val = sheet.Cells[rowNum, colNum].Value.ToString();
+                                string val = sheet.Cells[rowNum, colNum].Value.ToString();
 
                                 myData.Add(new TdLoadData(curLoad.Id, coord.RecordNumber, coord.InputVariableId,
                                     refPeriodId, val));
