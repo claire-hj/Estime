@@ -119,9 +119,6 @@ namespace ESTIME.BusinessLibrary
                         //use the input coordinates to converte the data in ws to a list of TdLoadData
                         List<TdLoadData> myData = new List<TdLoadData>();
 
-                        //var fileStream = new FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-
-
                         using (ws = new ExcelPackage(fi))
                         {
                             var sheet = ws.Workbook.Worksheets[estimeFileType.SheetNumber ?? 1];
