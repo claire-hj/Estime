@@ -17,8 +17,8 @@ namespace ESTIME.RESTfulAPI.Controllers
     {
         private DataLoaderManager dataLoaderManager;
         //private const string filePath = "\\\\fld5filer\\TransSurfaceIM\\Systems\\SystemDocs\\EstimeLoaderInputFiles\\";
-        //private const string filePath = "C:\\Users\\Claire\\Desktop\\ESTIME\\"; //temporary
-        private const string filePath = "C:\\Users\\ShanC\\Desktop\\Work\\Requirements\\Epic101_Birth\\"; //temporary
+        private const string filePath = "C:\\Users\\Claire\\Desktop\\ESTIME\\"; //temporary
+        //private const string filePath = "C:\\Users\\ShanC\\Desktop\\Work\\Requirements\\Epic101_Birth\\"; //temporary
         public DataLoaderController(DataLoaderManager manager)
         {
             //this.config = config;
@@ -45,23 +45,6 @@ namespace ESTIME.RESTfulAPI.Controllers
         public void Loading()
         {
             dataLoaderManager.TryLoadData();
-
-            //ESTIME.DAL.DataLoaderDal dataLoader = new DAL.DataLoaderDal("server=EETSDFTSDEV;database=EETSD_FTS_D;Integrated Security=True");
-            //dataLoader.LoadDataFileOld("test", userId);
-        }
-
-        [HttpGet("ReadFile", Name = "ReadFile")]
-        public void ReadFile()
-        {
-
-            var fi = new FileInfo(@"C:\Users\Claire\Desktop\ESTIME\test.xlsx");
-            using (var p = new ExcelPackage(fi))
-            {
-                var ws = p.Workbook.Worksheets[1];
-                //[h, 8]
-                var v = ws.Cells[10, 8].Value;
-
-            }
         }
 
     }

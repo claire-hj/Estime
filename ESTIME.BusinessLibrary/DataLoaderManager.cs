@@ -78,7 +78,10 @@ namespace ESTIME.BusinessLibrary
                 {
                     
                     //loading excel file
-                    var fi = new FileInfo(curLoad.FilePath);
+                    var fi = new FileStream(curLoad.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+                    ws = new ExcelPackage(fi);
+
                     if (estimeFileType.IsUniform)
                     {
                         //Uniform file
@@ -115,14 +118,16 @@ namespace ESTIME.BusinessLibrary
                         List<TlInputCoordinate> inputCoordinates = dal.GetInputCoordinateListByEstimeFileType(estimeFileType.Id).ToList();
                         //use the input coordinates to converte the data in ws to a list of TdLoadData
                         List<TdLoadData> myData = new List<TdLoadData>();
+
+                        //var fileStream = new FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+
                         using (ws = new ExcelPackage(fi))
                         {
                             var sheet = ws.Workbook.Worksheets[estimeFileType.SheetNumber ?? 1];
                             inputCoordinates.ForEach(delegate (TlInputCoordinate coord)
                             {
                                 int rowNum = coord.RowNumber ?? -1;
-
-
                                 int colNum = coord.ColumnNumber;
 
                                 string val = sheet.Cells[rowNum, colNum].Value.ToString();
