@@ -9,6 +9,7 @@ using System.IO;
 using OfficeOpenXml;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using ESTIME.RESTfulAPI.Objects;
+using ESTIME.DAL;
 
 namespace ESTIME.RESTfulAPI.Controllers
 {
@@ -35,15 +36,15 @@ namespace ESTIME.RESTfulAPI.Controllers
             string estimeFileTypeCode = splitName[0].Trim();
             string refPeriod = splitName[1].Trim();
             string prov = splitName[2].Trim();
-            bool success = false;
+            EnumReturnCode retVale;
 
             fileName = filePath + fileName;
 
             dataLoaderManager.StartLoading(refPeriod, estimeFileTypeCode, fileName, userId);
 
-            success = dataLoaderManager.TryLoadData(prov.Length == 2 ? prov : null);
+            retVale = dataLoaderManager.TryLoadData(prov.Length == 2 ? prov : null);
 
-            return new ScheduledJobResult(success);
+            return new ScheduledJobResult(retVale);
         }
         [HttpGet("Loading")]
         public void Loading()
