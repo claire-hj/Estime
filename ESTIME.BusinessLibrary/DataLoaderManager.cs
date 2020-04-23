@@ -181,8 +181,8 @@ namespace ESTIME.BusinessLibrary
         }
         public EnumReturnCode ReadTextFile()
         {
-            String FileName = curLoad.FilePath + estimeFileType.FileType.Extension;
-            using (StreamReader file = new StreamReader(FileName))
+          
+            using (StreamReader file = new StreamReader(curLoad.FilePath))
             {
                 //file = new StreamReader(curLoad.FilePath + estimeFileType.FileType.Extension);
 
@@ -201,7 +201,7 @@ namespace ESTIME.BusinessLibrary
 
                 if (LineNumber == 0)
                 {
-                    loadErr = FileName + " is empty!";
+                    loadErr = curLoad.FilePath + " is empty!";
                     loadRetCode = EnumReturnCode.EmptyFile;
                 }
                 else
