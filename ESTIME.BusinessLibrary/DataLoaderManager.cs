@@ -25,23 +25,21 @@ namespace ESTIME.BusinessLibrary
         private int refPeriodId;
         private TdLoad curLoad;
         ExcelPackage ws;
-        private bool loadSuccess;
+        private EnumReturnCode loadRetCode;
         private string loadErr = string.Empty;
-        private List<TdLoadStaging> newStagings = new List<TdLoadStaging>();
         public DataLoaderManager(IConfiguration config)
-            : 
-            base(config)
+            : base(config)
         {
             dal = new DataLoaderDal(connectionString);
         }
         public DataLoaderManager() : base() { }
 
-        public long StartLoading(string refPeriodCode, string estimeFileTypeCode, string fileName, string userName)
+        public EnumReturnCode StartLoading(string refPeriodCode, string estimeFileTypeCode, string fileName, string userName)
         {
             estimeFileType = dal.GetEstimeFileTypeByCode(estimeFileTypeCode);
             refPeriodId = dal.GetRefPeriodId(refPeriodCode);
             int loadStatusId = dal.GetLoadStatusId("R");
-            TdLoad newLoad = new TdLoad()
+            curLoad = new TdLoad()
             {
                 Id = 0,
                 FilePath = fileName,
@@ -50,32 +48,23 @@ namespace ESTIME.BusinessLibrary
                 LoadStatusId = loadStatusId,
                 UserId = userName
             };
-            curLoad = dal.AddTdLoad(newLoad);
-
-            //TryLoadData(fileName);
-
-            return curLoad.Id;
-
-
+            loadRetCode = dal.AddTdLoad(ref curLoad);
+            
+            return loadRetCode;
         }
 
-        public bool TryLoadData(string provCode = null)
+        public EnumReturnCode TryLoadData(string provCode = null)
         {
             try
             {
                 //estimeFileType = dal.GetEstimeFileTypeId("3");
                 if (estimeFileType.FileType.Extension == ".txt" || estimeFileType.FileType.Extension == ".csv")
                 {
+                    //loading text file
+                    //loadSuccess = dal.LoadTextDataFileByBulk(curLoad.Id, refPeriodId);
+
                     //Read loading text file into tdLoadStaging object
-                    loadSuccess = ReadTextFile();
-
-                    //save tdLoadStaging object to staging table
-
-                    if (loadSuccess)
-                    {
-                        dal.AddTdLoadStaging(curLoad.Id, refPeriodId,newStagings);
-
-                    }
+                    loadRetCode = ReadTextFile();
                 }
                 else if (estimeFileType.FileType.Extension == ".xlsx")
                 {
@@ -113,7 +102,7 @@ namespace ESTIME.BusinessLibrary
                                 string myRow = string.Join(',', rowVals);
                                 myStaging.Add(new TdLoadStaging(curLoad.Id, row - 1, myRow));
                             }
-                            loadSuccess = dal.AddTdLoadStaging(curLoad.Id, refPeriodId, myStaging);
+                            loadRetCode = dal.AddTdLoadStaging(curLoad.Id, refPeriodId, myStaging);
                         }
                     }
                     else 
@@ -138,28 +127,31 @@ namespace ESTIME.BusinessLibrary
 
                         }
                         //Add new data and save to database
-                        loadSuccess = dal.AddTdLoadData(curLoad.Id, refPeriodId, myData);
+                        loadRetCode = dal.AddTdLoadData(curLoad.Id, refPeriodId, myData);
                     }
                 }
-                return loadSuccess;
+                if (loadRetCode != EnumReturnCode.Success)
+                {
+                    loadErr += loadRetCode.ToString();
+                }
+                return loadRetCode;
             }
             catch (Exception e)
             {
-                loadErr = e.Message;
-                loadSuccess = false;
-                return loadSuccess;
+                loadErr += e.Message;
+                loadRetCode = EnumReturnCode.Failed;
+                return loadRetCode;
             }
             finally
             {
                 EndLoading();
             }
         }
-
         private void EndLoading()
         {
             curLoad.EndTime = System.DateTime.Now;
             int loadStatusId;
-            if (loadSuccess)
+            if (loadRetCode == EnumReturnCode.Success)
             {
                 loadStatusId = dal.GetLoadStatusId("C");
             }
@@ -187,17 +179,17 @@ namespace ESTIME.BusinessLibrary
                 throw e;
             }
         }
-
-        public bool ReadTextFile()
+        public EnumReturnCode ReadTextFile()
         {
-
-            using (StreamReader file = new StreamReader(curLoad.FilePath))
+            String FileName = curLoad.FilePath + estimeFileType.FileType.Extension;
+            using (StreamReader file = new StreamReader(FileName))
             {
                 //file = new StreamReader(curLoad.FilePath + estimeFileType.FileType.Extension);
 
                 int LineNumber = 0;
                 string ln;
 
+                List<TdLoadStaging> newStagings = new List<TdLoadStaging>();
 
                 while ((ln = file.ReadLine()) != null)
                 {
@@ -206,15 +198,19 @@ namespace ESTIME.BusinessLibrary
                     newStagings.Add(newLoad);
                 }
                 file.Close();
+
                 if (LineNumber == 0)
                 {
-                    loadErr = curLoad.FilePath + " is empty!";
-                    return false;
+                    loadErr = FileName + " is empty!";
+                    loadRetCode = EnumReturnCode.EmptyFile;
                 }
-
+                else
+                {
+                    //save tdLoadStaging object to staging table
+                    loadRetCode = dal.AddTdLoadStaging(curLoad.Id, refPeriodId, newStagings);
+                }
             }
-            return true;
+            return loadRetCode;
         }
-
     }
 }

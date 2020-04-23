@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ESTIME.DAL;
 
 namespace ESTIME.RESTfulAPI.Objects
 {
@@ -11,19 +12,17 @@ namespace ESTIME.RESTfulAPI.Objects
         public string ResultCode { get; set; }
         public string MessageEnglish { get; set; }
         public string MessageFrench { get; set; }
-        public ScheduledJobResult(bool isSuccessful)
+        public ScheduledJobResult(EnumReturnCode retVal)
         {
-            if (isSuccessful)
+            ResultID = (int)retVal;
+            ResultCode = retVal.ToString();
+            if (retVal == EnumReturnCode.Success)
             {
-                ResultID = 1;
-                ResultCode = "Sucess";
                 MessageEnglish = Resources.EstimeResource.GetString("ScheduledJobFinishedSuccessfully");
                 MessageFrench = Resources.EstimeResource.GetString("ScheduledJobFinishedSuccessfully", true);
             }
             else
             {
-                ResultID = 2;
-                ResultCode = "Fail";
                 MessageEnglish = Resources.EstimeResource.GetString("CriticalError");
                 MessageFrench = Resources.EstimeResource.GetString("CriticalError", true);
             }

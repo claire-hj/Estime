@@ -95,35 +95,44 @@ namespace ESTIME.DAL
             }
             return rp;
         }
-        public TdLoad AddTdLoad(TdLoad newLoad)
+        public EnumReturnCode AddTdLoad(ref TdLoad newLoad)
         {
+            EnumReturnCode retVal = EnumReturnCode.Success;
             using (var context = new EstimeContext(options, connString))
             {
-                EFHelper.CallEF(() =>
+                try
                 {
                     context.TdLoad.Add(newLoad);
                     context.SaveChanges();
-                });
+                }
+                catch
+                {
+                    retVal = EnumReturnCode.EfException;
+                }
             }
-            return newLoad;
+            return retVal;
         }
-        public void UpdateTdLoad(TdLoad curLoad)
+        public EnumReturnCode UpdateTdLoad(TdLoad curLoad)
         {
+            EnumReturnCode retVal = EnumReturnCode.Success;
             using (var context = new EstimeContext(options, connString))
             {
-                EFHelper.CallEF(() =>
+                try 
                 {
                     context.TdLoad.Update(curLoad);
                     context.SaveChanges();
-                });
+                }
+                catch
+                {
+                    retVal = EnumReturnCode.EfException;
+                }
             }
+            return retVal;
         }
         public IEnumerable<TlInputCoordinate> GetInputCoordinateListByEstimeFileType(int estFileTypeId)
         {
             IQueryable<TlInputCoordinate> coors = null;
             List<TlInputCoordinate> myList = new List<TlInputCoordinate>();
-
-
 
             using (var context = new EstimeContext(options, connString))
             {
@@ -139,9 +148,9 @@ namespace ESTIME.DAL
             }
             return myList;
         }
-        public bool AddTdLoadData(int loadId, int refPeriodId, List<TdLoadData> newLoadData)
+        public EnumReturnCode AddTdLoadData(int loadId, int refPeriodId, List<TdLoadData> newLoadData)
         {
-            bool retVal = false;
+            EnumReturnCode retVal;
 
             using (var context = new EstimeContext(connString))
             {
@@ -175,24 +184,24 @@ namespace ESTIME.DAL
                     {
                         context.Database.ExecuteSqlCommand("ESTIME.usp_InsertLoadData_MetadataPoint @LoadId, @RefPeriodId, @SuccessCode OUTPUT, @ErrorExceptionMessage OUTPUT", parameters);
 
-                        retVal = Convert.ToInt32(successParam.Value) == 0 ? true : false;
+                        retVal = (int)successParam.Value == 0 ? EnumReturnCode.Success : EnumReturnCode.DbException;
 
                         context.TdLoadData.AddRange(newLoadData);
                         context.SaveChanges();
                         trans.Commit();
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        retVal = false;
+                        retVal = EnumReturnCode.EfException;
                         trans.Rollback();
                     }
                 }
             }
             return retVal;
         }
-        public bool AddTdLoadStaging(int loadId, int refPeriodId, List<TdLoadStaging> newLoadStaging)
+        public EnumReturnCode AddTdLoadStaging(int loadId, int refPeriodId, List<TdLoadStaging> newLoadStaging)
         {
-            bool retVal = false;
+            EnumReturnCode retVal;
             using (var context = new EstimeContext(connString))
             {
                 using (var trans = context.Database.BeginTransaction())
@@ -227,22 +236,22 @@ namespace ESTIME.DAL
                         context.SaveChanges();
 
                         context.Database.ExecuteSqlCommand("ESTIME.usp_ProcessLoadStagingData @LoadId, @RefPeriodId, @SuccessCode OUTPUT, @ErrorExceptionMessage OUTPUT", parameters);
-                        retVal = Convert.ToInt32(successParam.Value) == 0 ? true : false;
+                        retVal = (int)successParam.Value == 0 ? EnumReturnCode.Success : EnumReturnCode.DbException;
 
                         trans.Commit();
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        retVal = false;
+                        retVal = EnumReturnCode.EfException;
                         trans.Rollback();
                     }
                 }
             }
             return retVal;
         }
-        public bool LoadTextDataFileByBulk(int loadId, int refPeriodId)
+        public EnumReturnCode LoadTextDataFileByBulk(int loadId, int refPeriodId)
         {
-            bool retVal = false;
+            EnumReturnCode retVal;
             using (var context = new EstimeContext(connString))
             {
                 var cmd = context.Database.GetDbConnection().CreateCommand();
@@ -280,11 +289,11 @@ namespace ESTIME.DAL
                 try
                 {
                     cmd.ExecuteNonQuery();
-                    retVal = (int)success.Value == 0 ? true : false;
+                    retVal = (int)success.Value == 0 ? EnumReturnCode.Success : EnumReturnCode.DbException;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    retVal = false;
+                    retVal = EnumReturnCode.EfException;
                 }
                 finally
                 {

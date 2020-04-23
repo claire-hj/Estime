@@ -13,12 +13,12 @@ namespace ESTIME.DAL.Interface
         TlLoadStatus GetLoadStatusByCode(string loadStatusCode);
         int GetRefPeriodId(string refPeriodCode);
         TcRefPeriod GetRefPeriodByCode(string refPeriodCode);
-        TdLoad AddTdLoad(TdLoad newLoad);
-        void UpdateTdLoad(TdLoad curLoad);
+        EnumReturnCode AddTdLoad(ref TdLoad newLoad);
+        EnumReturnCode UpdateTdLoad(TdLoad curLoad);
         IEnumerable<TlInputCoordinate> GetInputCoordinateListByEstimeFileType(int estimeFileTypeId);
-        bool LoadTextDataFileByBulk(int loadId, int refPeriodId);
-        bool AddTdLoadStaging(int loadId, int refPeriodId, List<TdLoadStaging> newLoadStaging);
-        bool AddTdLoadData(int loadId, int refPeriodId, List<TdLoadData>myData);
+        EnumReturnCode LoadTextDataFileByBulk(int loadId, int refPeriodId);
+        EnumReturnCode AddTdLoadStaging(int loadId, int refPeriodId, List<TdLoadStaging> newLoadStaging);
+        EnumReturnCode AddTdLoadData(int loadId, int refPeriodId, List<TdLoadData>myData);
 
     }
 }
