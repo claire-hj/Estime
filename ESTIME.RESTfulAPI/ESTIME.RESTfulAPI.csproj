@@ -15,19 +15,4 @@
     <ProjectReference Include="..\ESTIME.BusinessLibrary\ESTIME.BusinessLibrary.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Resources\EstimeResource.en.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>EstimeResource.en.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\EstimeResource.en.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>EstimeResource.en.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-
 </Project>

@@ -17,15 +17,15 @@ namespace ESTIME.RESTfulAPI.Objects
             {
                 ResultID = 1;
                 ResultCode = "Sucess";
-                MessageEnglish = "";
-                MessageFrench = "";
+                MessageEnglish = Resources.EstimeResource.GetString("ScheduledJobFinishedSuccessfully");
+                MessageFrench = Resources.EstimeResource.GetString("ScheduledJobFinishedSuccessfully", true);
             }
             else
             {
                 ResultID = 2;
                 ResultCode = "Fail";
-                MessageEnglish = "";
-                MessageFrench = "";
+                MessageEnglish = Resources.EstimeResource.GetString("CriticalError");
+                MessageFrench = Resources.EstimeResource.GetString("CriticalError", true);
             }
         }
     }
