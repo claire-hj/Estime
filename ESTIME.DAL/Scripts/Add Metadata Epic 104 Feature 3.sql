@@ -1,8 +1,6 @@
-SET IDENTITY_INSERT [ESTIME].[tl_EstimeFileType] ON 
-GO
+
 INSERT INTO [ESTIME].[tl_EstimeFileType]
-           ([Id]
-		   ,[Code]
+           ([Code]
            ,[NameEnglish]
            ,[NameFrench]
            ,[FileTypeId]
@@ -10,199 +8,121 @@ INSERT INTO [ESTIME].[tl_EstimeFileType]
            ,[SheetNumber]
            ,[IsUniform])
      VALUES
-           (9
-		   ,'MIPCC'
+           ('MIPCC'
            ,'Interprovincial Migration Child CCTB'
            ,'Interprovincial Migration Child CCTB'
            ,2
            ,null
            ,null
            ,0)
-GO
-SET IDENTITY_INSERT [ESTIME].[tl_EstimeFileType] Off
-GO
 
-SET IDENTITY_INSERT [ESTIME].[tl_InputVariable] ON 
-GO
+go
+
+declare @EstimeFileTypeId int
+select @EstimeFileTypeId = Id from Estime.tl_EstimeFileType where Code = 'MIPCC'
+
 INSERT INTO [ESTIME].[tl_InputVariable]
-           ([ID]
-		   ,[EstimeFileTypeId]
+           ([EstimeFileTypeId]
            ,[VariableId]
            ,[DisplayOrder]
            ,[isMandatory]
            ,[isParameter])
      VALUES
-           (55, 9, 22, 1, 1, 0),
-		   (56, 9, 2, 2, 1, 0),
-		   (57, 9, 1, 3, 1, 0)
-GO
-SET IDENTITY_INSERT [ESTIME].[tl_InputVariable] Off
+           (@EstimeFileTypeId, 22, 1, 1, 0),
+		   (@EstimeFileTypeId, 2, 2, 1, 0),
+		   (@EstimeFileTypeId, 1, 3, 1, 0)
+go
+
+declare @EstimeFileTypeId int
+select @EstimeFileTypeId = Id from Estime.tl_EstimeFileType where Code = 'MIPCC'
+declare @InputVariable_Value int
+select @InputVariable_Value = Id from ESTIME.tl_InputVariable where EstimeFileTypeId = @EstimeFileTypeId and VariableId = 1
+
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (1, @InputVariable_Value, 3, 54)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (2, @InputVariable_Value, 3, 55)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (3, @InputVariable_Value, 3, 56)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (4, @InputVariable_Value, 3, 57)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (5, @InputVariable_Value, 3, 58)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (6, @InputVariable_Value, 3, 59)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7, @InputVariable_Value, 3, 60)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (8, @InputVariable_Value, 3, 61)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (9, @InputVariable_Value, 3, 62)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (10, @InputVariable_Value, 3, 63)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (11, @InputVariable_Value, 3, 64)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (12, @InputVariable_Value, 3, 65)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (13, @InputVariable_Value, 3, 66)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (14, @InputVariable_Value, 3, 77)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (15, @InputVariable_Value, 3, 78)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (16, @InputVariable_Value, 3, 79)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (17, @InputVariable_Value, 3, 80)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (18, @InputVariable_Value, 3, 81)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (19, @InputVariable_Value, 3, 82)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (20, @InputVariable_Value, 3, 83)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (21, @InputVariable_Value, 3, 84)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (22, @InputVariable_Value, 3, 85)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (23, @InputVariable_Value, 3, 86)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (24, @InputVariable_Value, 3, 87)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (25, @InputVariable_Value, 3, 88)
+INSERT [ESTIME].[tl_InputCoordinate] ([RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (26, @InputVariable_Value, 3, 89)
 GO
 
+declare @EstimeFileTypeId int
+select @EstimeFileTypeId = Id from Estime.tl_EstimeFileType where Code = 'MIPCC'
+declare @InputVariable_Prov int, @InputVariable_Status int
+select @InputVariable_Prov = Id from ESTIME.tl_InputVariable where EstimeFileTypeId = @EstimeFileTypeId and VariableId = 2
+select @InputVariable_Status = Id from ESTIME.tl_InputVariable where EstimeFileTypeId = @EstimeFileTypeId and VariableId = 22
 
-SET IDENTITY_INSERT [ESTIME].[tl_InputCoordinate] ON 
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7250, 1, 57, 3, 54)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7251, 2, 57, 3, 55)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7252, 3, 57, 3, 56)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7253, 4, 57, 3, 57)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7254, 5, 57, 3, 58)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7255, 6, 57, 3, 59)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7256, 7, 57, 3, 60)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7257, 8, 57, 3, 61)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7258, 9, 57, 3, 62)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7259, 10, 57, 3, 63)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7260, 11, 57, 3, 64)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7261, 12, 57, 3, 65)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7262, 13, 57, 3, 66)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7263, 14, 57, 3, 77)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7264, 15, 57, 3, 78)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7265, 16, 57, 3, 79)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7266, 17, 57, 3, 80)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7267, 18, 57, 3, 81)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7268, 19, 57, 3, 82)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7269, 20, 57, 3, 83)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7270, 21, 57, 3, 84)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7271, 22, 57, 3, 85)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7272, 23, 57, 3, 86)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7273, 24, 57, 3, 87)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7274, 25, 57, 3, 88)
-GO
-INSERT [ESTIME].[tl_InputCoordinate] ([Id], [RecordNumber], [InputVariableId], [ColumnNumber], [RowNumber]) VALUES (7275, 26, 57, 3, 89)
-GO
-SET IDENTITY_INSERT [ESTIME].[tl_InputCoordinate] OFF
-GO
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (1, @InputVariable_Status, N'2')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (2, @InputVariable_Status, N'2')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (3, @InputVariable_Status, N'2')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (4, @InputVariable_Status, N'2')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (5, @InputVariable_Status, N'2')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (6, @InputVariable_Status, N'2')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (7, @InputVariable_Status, N'2')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (8, @InputVariable_Status, N'2')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (9, @InputVariable_Status, N'2')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (10, @InputVariable_Status, N'2')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (11, @InputVariable_Status, N'2')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (12, @InputVariable_Status, N'2')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (13, @InputVariable_Status, N'2')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (14, @InputVariable_Status, N'A')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (15, @InputVariable_Status, N'A')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (16, @InputVariable_Status, N'A')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (17, @InputVariable_Status, N'A')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (18, @InputVariable_Status, N'A')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (19, @InputVariable_Status, N'A')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (20, @InputVariable_Status, N'A')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (21, @InputVariable_Status, N'A')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (22, @InputVariable_Status, N'A')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (23, @InputVariable_Status, N'A')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (24, @InputVariable_Status, N'A')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (25, @InputVariable_Status, N'A')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (26, @InputVariable_Status, N'A')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (1, @InputVariable_Prov, N'10')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (2, @InputVariable_Prov, N'11')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (3, @InputVariable_Prov, N'12')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (4, @InputVariable_Prov, N'13')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (5, @InputVariable_Prov, N'24')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (6, @InputVariable_Prov, N'35')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (7, @InputVariable_Prov, N'46')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (8, @InputVariable_Prov, N'47')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (9, @InputVariable_Prov, N'48')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (10, @InputVariable_Prov, N'59')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (11, @InputVariable_Prov, N'63')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (12, @InputVariable_Prov, N'62')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (13, @InputVariable_Prov, N'61')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (14, @InputVariable_Prov, N'10')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (15, @InputVariable_Prov, N'11')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (16, @InputVariable_Prov, N'12')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (17, @InputVariable_Prov, N'13')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (18, @InputVariable_Prov, N'24')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (19, @InputVariable_Prov, N'35')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (20, @InputVariable_Prov, N'46')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (21, @InputVariable_Prov, N'47')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (22, @InputVariable_Prov, N'48')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (23, @InputVariable_Prov, N'59')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (24, @InputVariable_Prov, N'63')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (25, @InputVariable_Prov, N'62')
+INSERT [ESTIME].[tl_InputVariableValue] ([RecordNumber], [InputVariableId], [VariableValue]) VALUES (26, @InputVariable_Prov, N'61')
 
-
-SET IDENTITY_INSERT [ESTIME].[tl_InputVariableValue] ON 
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42816, 1, 55, N'2')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42818, 2, 55, N'2')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42820, 3, 55, N'2')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42822, 4, 55, N'2')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42824, 5, 55, N'2')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42826, 6, 55, N'2')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42828, 7, 55, N'2')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42830, 8, 55, N'2')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42832, 9, 55, N'2')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42834, 10, 55, N'2')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42836, 11, 55, N'2')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42838, 12, 55, N'2')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42840, 13, 55, N'2')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42842, 14, 55, N'A')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42844, 15, 55, N'A')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42846, 16, 55, N'A')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42848, 17, 55, N'A')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42850, 18, 55, N'A')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42852, 19, 55, N'A')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42854, 20, 55, N'A')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42856, 21, 55, N'A')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42858, 22, 55, N'A')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42860, 23, 55, N'A')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42862, 24, 55, N'A')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42864, 25, 55, N'A')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42866, 26, 55, N'A')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42817, 1, 56, N'10')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42819, 2, 56, N'11')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42821, 3, 56, N'12')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42823, 4, 56, N'13')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42825, 5, 56, N'24')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42827, 6, 56, N'35')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42829, 7, 56, N'46')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42831, 8, 56, N'47')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42833, 9, 56, N'48')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42835, 10, 56, N'59')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42837, 11, 56, N'63')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42839, 12, 56, N'62')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42841, 13, 56, N'61')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42843, 14, 56, N'10')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42845, 15, 56, N'11')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42847, 16, 56, N'12')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42849, 17, 56, N'13')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42851, 18, 56, N'24')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42853, 19, 56, N'35')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42855, 20, 56, N'46')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42857, 21, 56, N'47')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42859, 22, 56, N'48')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42861, 23, 56, N'59')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42863, 24, 56, N'63')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42865, 25, 56, N'62')
-GO
-INSERT [ESTIME].[tl_InputVariableValue] ([Id], [RecordNumber], [InputVariableId], [VariableValue]) VALUES (42867, 26, 56, N'61')
-GO
-SET IDENTITY_INSERT [ESTIME].[tl_InputVariableValue] OFF
-GO
+go
