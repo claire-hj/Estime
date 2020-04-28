@@ -393,7 +393,7 @@ namespace ESTIME.DAL.EstimeEntity
             {
                 entity.ToTable("tl_EstimeFileType", "ESTIME");
 
-                entity.HasIndex(e => e.Code)
+                entity.HasIndex(e => new { e.Code, e.SheetNumber })
                     .HasName("UQ_tl_EstimeFileType")
                     .IsUnique();
 
@@ -570,10 +570,6 @@ namespace ESTIME.DAL.EstimeEntity
                     .HasForeignKey(d => d.CodeSetId)
                     .HasConstraintName("FK_Variable_CodeSet");
             });
-
-            modelBuilder.HasSequence<int>("NextFileColumn")
-                .StartsAt(17)
-                .HasMin(0);
         }
     }
 }
