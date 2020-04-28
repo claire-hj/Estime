@@ -70,7 +70,6 @@ namespace ESTIME.DAL
             }
             return ls;
         }
-
         public int GetRefPeriodId(string refPeriodCode)
         {
             int id = 0;
